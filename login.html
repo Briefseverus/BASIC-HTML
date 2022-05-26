@@ -1,0 +1,212 @@
+<html>
+  <script
+    src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"
+  ></script>
+  <link
+    rel="stylesheet"
+    href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous"
+  />
+  <head>
+    <link
+      href="https://fonts.googleapis.com/css?family=Ubuntu"
+      rel="stylesheet"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style1.css" />
+    <title>Sign in</title>
+    <style>
+      span {
+        color: red;
+        display: block;
+        padding: 5px 0px;
+        padding-left: 80px;
+        padding-bottom: 45px;
+        padding-top: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="main">
+      <p class="sign" align="center">Sign in</p>
+      <form class="form1" action="index.html" id="loginform">
+        <input
+          class="un"
+          id="username"
+          type="text"
+          align="center"
+          placeholder="Username"
+        />
+        <span id="username_error"></span>
+        <input
+          class="pass"
+          id="password"
+          type="password"
+          align="center"
+          placeholder="Password"
+        />
+        <span id="password_error"></span>
+        <button class="submit" id="btn" type="submit" align="center">
+          Sign in
+        </button>
+
+        <p class="forgot" id="Add" align="center">
+          <a href="#">First time? Register now></a>
+        </p>
+      </form>
+    </div>
+
+    <div class="popup">
+      <table class="table">
+        <div class="popup-content">
+          <form id="form">
+            <label for="name"></label>
+
+            <div class="form-group">
+              <input
+                type="text"
+                class="form-control"
+                id="username1"
+                placeholder=" Name"
+                required
+              />
+              <span id="username1_error"></span>
+              <input
+                type="password"
+                class="form-control"
+                id="password1"
+                placeholder=" Password"
+              />
+              <span id="password1_error"></span>
+            </div>
+            <button type="submit" onclick="" id="close">Submit</button>
+          </form>
+        </div>
+      </table>
+    </div>
+  </body>
+  <script>
+    document.getElementById("btn").onclick = function () {
+      validate();
+    };
+    document.getElementById("close").onclick = function () {
+      validate1();
+    };
+    const isEmpty = (v) => {
+      return Object.keys(v).length === 0;
+    };
+    function getValue(id) {
+      return document.getElementById(id).value;
+    }
+
+    function showError(key, mess) {
+      document.getElementById(key + "_error").innerHTML = mess;
+    }
+
+    function validate() {
+      var flag = false;
+      var username = getValue("username");
+      if (
+        username == "" ||
+        username.length < 5 ||
+        !/[a-zA-Z0-9]/.test(username)
+      ) {
+        flag = false;
+        showError("username", "Vui long nhap dung dinh dang");
+      }
+      var password = getValue("password");
+
+      if (password == "" || password.length < 8) {
+        flag = false;
+        showError("password", "Vui long nhap dung dinh dang");
+      }
+
+      let userList = new Array();
+
+      userList = JSON.parse(localStorage.getItem("users"))
+        ? JSON.parse(localStorage.getItem("users"))
+        : [];
+
+      var i;
+      for (i = 0; i < userList.length; i++) {
+        if (username == userList[i].name && password == userList[i].psw) {
+          flag = true;
+          localStorage.setItem("currentUser", username);
+          return flag;
+        }
+      }
+
+      showError("password", "Sai ten dang nhap hoac mat khau");
+      return flag;
+    }
+
+    document.getElementById("Add").onclick = function () {
+      document.querySelector(".popup").style.display = " flex";
+    };
+    let user_records = new Array();
+    function validate1() {
+      var flag1 = false;
+      var username1 = getValue("username1");
+      if (
+        username1 == "" ||
+        username1.length < 5 ||
+        !/[a-zA-Z0-9]/.test(username1)
+      ) {
+        flag1 = false;
+        showError("username1", "Vui long nhap dung dinh dang ");
+      }
+      var password1 = getValue("password1");
+
+      if (password1 == "" || password1.length < 8) {
+        flag1 = false;
+        showError("password1", "Vui long nhap dung dinh dang");
+      }
+
+      user_records = JSON.parse(localStorage.getItem("users"))
+        ? JSON.parse(localStorage.getItem("users"))
+        : [];
+
+      if (
+        user_records.some((v) => {
+          return v.name == username1;
+        })
+      ) {
+        showError("username1", "Trung username");
+        flag1 = false;
+      } else if (
+        username1 == "" ||
+        username1.length < 5 ||
+        !/[a-zA-Z0-9]/.test(username1)
+      ) {
+        flag1 = false;
+        showError("username1", "Vui long nhap dung dinh dang ");
+      } else if (password1 == "" || password1.length < 8) {
+        flag1 = false;
+        showError("password1", "Vui long nhap dung dinh dang");
+      } else {
+        user_records.push({
+          name: username1,
+          psw: password1,
+        });
+        localStorage.setItem("users", JSON.stringify(user_records));
+        document.querySelector(".popup").style.display = " none";
+        flag1 = true;
+      }
+      return flag1;
+    }
+  </script>
+</html>
